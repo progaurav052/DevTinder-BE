@@ -3,27 +3,19 @@ const express = require("express");
 const app =express();
 //here we are creating that server application and referencing it to app 
 
-app.use("/test",(req,res)=>{
-    res.send("hello, this is test page");
+app.get("/user",(req,res)=>{
+    res.send({"firstname":"Gaurav","lastname":"Pai"});
 
 })
-app.use("/admin", (req,res)=>{
-    res.send("hello, this is admin page");
+app.post("/user",(req,res)=>{
+    res.send("User Deatils received...storing in database...");
 
 })
-
-app.use("/checkout", (req,res)=>{
-    res.send("hello, this is checkout page");
-
+app.delete("/user",(req,res)=>{
+    res.send("User data deleted...");
 })
-
-app.use("/edit", (req,res)=>{
-    res.send("hello, this is edit page");
-
-})
-
-app.use("/",(req,res)=>{
-    res.send("hello , this is Dashboard");
+app.use("/user",(req,res)=>{
+    res.send("Redundant response...");
 
 })
 
