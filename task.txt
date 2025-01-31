@@ -8,11 +8,14 @@
 - nodemon installed for convi
 - diff bw ^ and ~ in dependecies 
 
------------------------------------------------------
+----------------------------------------------------------------------------
 
 - Initialized git repo for this folder 
 - created a remote repo on github 
 - push main branch to origin/main
 - made some misc api request
 - installed postman , worksapce - >collection(collection of API to test)
+- Tested GET,POST,DELETE API ....
+- Read the DOC for regex in path , and other complex paths ...
+----------------------------------------------------------------------------
 
