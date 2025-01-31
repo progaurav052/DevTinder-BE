@@ -3,7 +3,17 @@ const express = require("express");
 const app =express();
 //here we are creating that server application and referencing it to app 
 
+app.get("/user/:UserId",(req,res)=>{
+    // for Dynamic calls like /user/7097 ... or anything , searching for particular user
+    console.log(req.params);
+    console.log(req.query);
+
+    res.send(`fetching details of User : ${req.params}`)
+})
 app.get("/user",(req,res)=>{
+    console.log(req.query);
+    //used to fetch query params ..
+
     res.send({"firstname":"Gaurav","lastname":"Pai"});
 
 })
