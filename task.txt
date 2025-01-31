@@ -1,0 +1,13 @@
+- Created a folder 
+- Initialized the rep - npm init 
+- node_modules,package.json,package-lock.json
+- installed express
+- Created a server
+- Listen to port at some port
+- Wrote request and response handler /test / /edit 
+- nodemon installed for convi
+- diff bw ^ and ~ in dependecies 
+
+-----------------------------------------------------
+
+- Initialized git repo for this folder 
