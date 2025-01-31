@@ -11,3 +11,8 @@
 -----------------------------------------------------
 
 - Initialized git repo for this folder 
+- created a remote repo on github 
+- push main branch to origin/main
+- made some misc api request
+- installed postman , worksapce - >collection(collection of API to test)
+
