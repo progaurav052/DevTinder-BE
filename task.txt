@@ -21,4 +21,9 @@
 
 - Route handling 
 - create multiple route handler 
-
+- what is middleware and route handler
+- importance of route handler 
+- create a auth middleware for /admin 
+- create a auth middleware for /user except /user/register
+- do error handling using try catch
+- do error handling using app.use("/",(err,req,res,next))
