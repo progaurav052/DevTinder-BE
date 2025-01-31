@@ -3,19 +3,10 @@ const express = require("express");
 const app = express();
 //here we are creating that server application and referencing it to app
 //example for multiple route handlers
+const {AdminAuth} =require("./middlewares/auth");
 
-app.use("/admin",(req,res,next)=>{
-  console.log("Admin Auth started");
-  const token ="xyz";
-  const isAuthorized = token === "xyz";
-  if(!isAuthorized)
-  {
-   res.status(401).send("Wrong admin credentials");
-  }
-  else{
-   next();
-  }
-})
+app.use("/admin",AdminAuth);
+
 
 app.get("/admin/getAllUser",(req,res)=>{
 
