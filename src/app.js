@@ -4,34 +4,27 @@ const app = express();
 //here we are creating that server application and referencing it to app
 //example for multiple route handlers
 
-app.get("/admin/getAllUser",(req,res)=>{
-   console.log("Admin Auth started");
-   const token ="xyz";
-   const isAuthorized = token === "xyzvb";
-   if(!isAuthorized)
-   {
-    res.status(401).send("Wrong admin credentials");
-   }
-   else{
-    console.log("Admin authenticated..")
-    res.send("Sent All Users Data...");
+app.use("/admin",(req,res,next)=>{
+  console.log("Admin Auth started");
+  const token ="xyz";
+  const isAuthorized = token === "xyz";
+  if(!isAuthorized)
+  {
+   res.status(401).send("Wrong admin credentials");
+  }
+  else{
+   next();
+  }
+})
 
-   }
+app.get("/admin/getAllUser",(req,res)=>{
+
+    res.send("Sent All Users Data...");
 
 })
 app.get("/admin/DeleteUser",(req,res)=>{
-  console.log("Admin Auth started");
-  const token ="xyz";
-   const isAuthorized = token === "xyzvb";
-   if(!isAuthorized)
-   {
-    res.status(401).send("Wrong admin credentials");
-   }
-   else{
-    console.log("Admin authenticated...");
+  
     res.send("User Data Deleted by Admin...");
-
-   }
 
 })
 
