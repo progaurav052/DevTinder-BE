@@ -27,3 +27,11 @@
 - create a auth middleware for /user except /user/register -done
 - do error handling using try catch 
 - do error handling using app.use("/",(err,req,res,next))
+
+-----------------------------------------------------------------------------
+- create a clutser and connect using compass
+- installed mongoose lib 
+- create a config folder and database.js file for database communication
+- connect your application to database using string 
+- call the connectDB function before starting app.listen on 7777
+- create an User Schema and then model 
