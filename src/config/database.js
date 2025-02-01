@@ -1,13 +1,16 @@
+// this js file is used to connect to database
 const mongoose = require("mongoose");
-//mongoose.connect("mongodb+srv://gaurav511pai:<db_password>@namastenode.8abuz.mongodb.net/");
-// connecting to mongoose cluster above is normal /bad way 
 
-const connectDB = async () =>{
-    await mongoose.connect("mongodb+srv://gaurav511pai:ggpai2024@namastenode.8abuz.mongodb.net/DevTinder");
+//short and simple way , but not a good way to handle
+//mongoose.connect("mongodb+srv://gaurav511pai:ggpai2024@namastenode.8abuz.mongodb.net/")
+// .connect function returns an promise we need to handle it
 
-}// this will return promise 
+const connectDB = async () => {
+  await mongoose.connect(
+    "mongodb+srv://gaurav511pai:ggpai2024@namastenode.8abuz.mongodb.net/DevTinder"
+  );
+};
 
-
-module.exports ={
-    connectDB,
-}
+module.exports = {
+  connectDB,
+};
