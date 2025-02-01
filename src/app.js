@@ -1,32 +1,47 @@
 const express = require("express");
+const { connectDB } = require("./config/database"); // this will use the concept of IIFE and will run the cluster/database connection code
+const {User} = require("./models/user");
+
 //i saw from the express code it is exporting something called createapplication function
 const app = express();
 //here we are creating that server application and referencing it to app
-//example for multiple route handlers
-const { AdminAuth, UserAuth } = require("./middlewares/auth");
 
-app.use("/admin", AdminAuth);
-// we can explicity make this middlewares available to the api calls
+//create an api to add user 
+// POST method
 
-app.get("/user/login", UserAuth, (req, res) => {
-  //here we used the concept of middlewares as multiple route handlers...
-  //middlwares ~ route handlers
-  res.send("User ops performed successfully");
-});
-app.post("/user/post-data", UserAuth, (req, res) => {
-  res.send("User posted data successfully");
-});
-app.post("/user/register", (req, res) => {
-  res.send("user registered !!! , welcome...");
-});
+app.post("/signup", async (req,res)=>{
+  //dummy data
+  const userObj ={
+    firstName:"Virat",
+    lastName :"Kohli",
+    emailId : "virat18kohli@gmail.com",
+    password : "virat@123"
+  }
+  //creating a new instance of the User Model syntax 
+  const user = new User(userObj);
 
-app.get("/admin/getAllUser", (req, res) => {
-  res.send("Sent All Users Data...");
-});
-app.get("/admin/DeleteUser", (req, res) => {
-  res.send("User Data Deleted by Admin...");
-});
+  //saving , this will return a promise  
+  await user.save();
 
-app.listen(3000, () => {
-  console.log("Server up and running on port 3000");
-});
+  res.send("user added succesfully");
+
+})
+
+
+
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully");
+    //this is the correct way of writing code..
+    //it may happen in some case that database is not connected but you application to accepting API .... this is wrong
+    // always connect to DB first , than do app.listen for api...
+
+    app.listen(3000, () => {
+      console.log("Server up and running on port 3000");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
