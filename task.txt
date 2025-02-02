@@ -35,3 +35,17 @@
 - connect your application to database using string 
 - call the connectDB function before starting app.listen on 7777
 - create an User Schema and then model 
+------------------------------------------------------------------------------
+
+- send data thorugh dynamic using postman 
+- use express.json to parse data in req.body 
+- check DB if data(doc) is saved 
+- GET API - to get user by email
+- GET API - Feed API - get all users 
+- findBY ID api 
+- update api 
+- delete api 
+- use patch for update 
+- find diff bw patch and put 
+
+
