@@ -40,12 +40,24 @@
 - send data thorugh dynamic using postman 
 - use express.json to parse data in req.body 
 - check DB if data(doc) is saved 
-- GET API - to get user by email
-- GET API - Feed API - get all users 
+- GET API - to get user by email - done
+- GET API - Feed API - get all users -done 
 - findBY ID api 
-- update api 
-- delete api 
-- use patch for update 
-- find diff bw patch and put 
+- findby email ID and update -done
+- update api -done
+- delete api -done
+- use patch for update -done
+- find diff bw patch and put -done
+
+--------------------------------------------------------------------------------
+
+- Explore Schematype options and use docs
 
 
+- add required , unique , lowercase , min , minLength , trim, -done
+- add ddefault - done 
+- create custom validation function for gender 
+- improve DB schema - put reqd validation - done 
+- add timestamps to docs... 
+
+---------------------------------------------------------------------------------
