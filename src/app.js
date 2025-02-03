@@ -49,7 +49,7 @@ app.patch("/user", async (req, res) => {
     }
   } catch (error) {
     //coding error
-    res.status(400).send("Something went Wrong !!!");
+    res.status(400).send("Error Updating User:"+ error.message);
   }
 });
 
@@ -68,7 +68,7 @@ app.delete("/user", async (req, res) => {
     }
   } catch (error) {
     // coding error
-    res.status(400).send("something went wrong");
+    res.status(400).send("Error while deleting user"+error.message);
   }
 });
 
@@ -84,7 +84,7 @@ app.get("/users", async (req, res) => {
     }
   } catch (error) {
     //coding error
-    res.status(400).send("something went Wrong!!!");
+    res.status(400).send("error while fetching the users "+ error.message);
   }
 });
 
@@ -104,7 +104,7 @@ app.get("/user", async (req, res) => {
     }
   } catch (err) {
     // this is to handle coding error
-    res.status(400).send("Something went Wrong");
+    res.status(400).send("error while getting details of the user "+ err.message);
   }
 });
 
@@ -128,6 +128,7 @@ app.post("/signup", async (req, res) => {
     await newuser.save(); // a new doc will be saved in the collection after this
     res.send("New User added Successfully !!!");
   } catch (err) {
+    // if data validation is not met this will be triggered also 
     res.status(400).send("Error Saving the user:" + err.message);
   }
 });

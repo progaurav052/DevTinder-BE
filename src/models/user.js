@@ -1,26 +1,41 @@
 //Schema - Model creation
 const mongoose = require("mongoose");
 
-const userSchema = mongoose.Schema({
-  firstName: {
-    type: String,
+const userSchema = mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 10,
+    },
+    lastName: {
+      type: String,
+    },
+    emailId: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    age: {
+      type: String,
+    },
+    gender: {
+      type: String,
+    },
+    profileurl: {
+      type: String,
+      default: "Default profile pic",
+    },
   },
-  lastName: {
-    type: String,
-  },
-  emailId: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  age: {
-    type: String,
-  },
-  gender: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 //now we have to create an model from the above Schema
 //model Name should start with Captial
