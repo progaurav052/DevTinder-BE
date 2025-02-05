@@ -25,23 +25,37 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("Database connection Not Successfull!!!");
+    console.log("Database connection Not Successfull!!!" + err.message);
   });
 
 // for finding and updating
 //working
-app.patch("/user", async (req, res) => {
-  const userId = req.body._id;
+app.patch("/user/:user_id", async (req, res) => {
+  const userId = req.params.user_id;
   console.log(userId);
+  const data = req.body;
+  // adding an api validation to allow only specific feild updates
 
   try {
     // we have to find a record and update it
     //using findbyID
-    const updated_doc = await User.findByIdAndUpdate(
-      userId,
-      { emailId: "rohit264@gmail.com", password: "rohit264" },
-      { returnDocument: "after" }
+    const allowedUpdates = ["skills", "gender", "profileurl", "age"];
+
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      allowedUpdates.includes(k)
     );
+    if (!isUpdateAllowed) {
+      throw new Error("Update of the specified field not allowed!!");
+    }
+    if(data?.skills?.length>10)
+    {
+      throw new Error("skills length should be less than 10, Add only relevant skills according to JD")
+    }
+
+    const updated_doc = await User.findByIdAndUpdate(userId, data, {
+      returnDocument: "after",
+      runValidators: true,
+    });
     if (!updated_doc) {
       res.status(404).send("Document to update not found!!");
     } else {
@@ -49,7 +63,7 @@ app.patch("/user", async (req, res) => {
     }
   } catch (error) {
     //coding error
-    res.status(400).send("Error Updating User:"+ error.message);
+    res.status(400).send("Error Updating User:" + error.message);
   }
 });
 
@@ -68,7 +82,7 @@ app.delete("/user", async (req, res) => {
     }
   } catch (error) {
     // coding error
-    res.status(400).send("Error while deleting user"+error.message);
+    res.status(400).send("Error while deleting user" + error.message);
   }
 });
 
@@ -84,7 +98,7 @@ app.get("/users", async (req, res) => {
     }
   } catch (error) {
     //coding error
-    res.status(400).send("error while fetching the users "+ error.message);
+    res.status(400).send("error while fetching the users " + error.message);
   }
 });
 
@@ -104,7 +118,9 @@ app.get("/user", async (req, res) => {
     }
   } catch (err) {
     // this is to handle coding error
-    res.status(400).send("error while getting details of the user "+ err.message);
+    res
+      .status(400)
+      .send("error while getting details of the user " + err.message);
   }
 });
 
@@ -128,7 +144,7 @@ app.post("/signup", async (req, res) => {
     await newuser.save(); // a new doc will be saved in the collection after this
     res.send("New User added Successfully !!!");
   } catch (err) {
-    // if data validation is not met this will be triggered also 
+    // if data validation is not met this will be triggered also
     res.status(400).send("Error Saving the user:" + err.message);
   }
 });
