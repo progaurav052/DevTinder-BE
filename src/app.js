@@ -7,10 +7,12 @@ const { connectDB } = require("./config/database");
 const { ReturnDocument } = require("mongodb");
 const { isValidated } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 // it converts json to js object and makes it available in req.body
 // this is middleware will be activated for all routes
 // middleware to read the json data in the req.body
@@ -127,67 +129,73 @@ app.get("/user", async (req, res) => {
   }
 });
 
-// POST API --> to store data in DB
-//working
-app.post("/login",async(req,res)=>{
-  
-  try {
-          //our login logic will be based on email and password
-          const {emailId,password}=req.body;
-          if(!emailId || !password) // if we dont send email and pass in re.body and if we leave it empty to handle this 
-          {
-              throw new Error("Enter both EmailId and password");
-          }
-          const user = await User.findOne({emailId:emailId});
-          if(!user)
-          {
-            res.send("invalid Credentials!!!");
-          }
-          else
-          {
-            //we have found the email sent from body 
-            //match the password
-            const match = await bcrypt.compare(password,user.password);
-            if(match)
-            {
-              res.send("Logged in Successfully!!!");
-            }
-            else{
-              res.send("Invalid Credentials");
-            }
-          }
 
+app.get("/profile",async(req,res)=>{
+// this is an api which is called usuaaly after getting logged in for fetching my profile
+// Note for this we should not send any req.body --> this can be handled using cookies 
 
-    
-  } catch (error) {
-    res.status(400).send(error.message);
-
-  }
-  
-
+//let just intially see if we are getting the cookie with token back 
+console.log(req.cookies);// we need to use the cookie parser to read the cookie
+res.send("Sending the /profile page ....");
 
 
 })
+
+// POST API --> to store data in DB
+//working
+app.post("/login", async (req, res) => {
+  try {
+    //our login logic will be based on email and password
+    const { emailId, password } = req.body;
+    if (!emailId || !password) {
+      // if we dont send email and pass in re.body and if we leave it empty to handle this
+      throw new Error("Enter both EmailId and password");
+    }
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      res.send("invalid Credentials!!!");
+    } else {
+      //we have found the email sent from body
+      //match the password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        // if password is valid --> login is successfull and we need to store session of the user
+        // this can be done using cookies and jwt 
+        //this jwt will be inside the cookies and will be sent with every api call of that user once he is logged in 
+        //dummy token creation
+        const token="bbjasbbadslfhpfjdsffbdsidsofi";
+                    //name //value of the token        
+        res.cookie("token",token);
+        res.send("Logged in Successfully!!!");
+      } else {
+        res.send("Invalid Credentials");
+      }
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 app.post("/signup", async (req, res) => {
   // validation of data should happen first
   // dont write validation code here -- Make use of helper function which we can call
   try {
     isValidated(req);
-    const { firstName, lastName, emailId, password, age, gender, skills } =req.body;
-  
+    const { firstName, lastName, emailId, password, age, gender, skills } =
+      req.body;
+
     //encrypt the password and store it
     //use bcrypt
-    const hashpwd=await bcrypt.hash(password,10);
+    const hashpwd = await bcrypt.hash(password, 10);
     const newuser = new User({
       firstName,
       lastName,
       emailId,
-      password:hashpwd,// storing hash pwd
+      password: hashpwd, // storing hash pwd
       age,
       gender,
       skills,
     });
-    
+
     await newuser.save(); // a new doc will be saved in the collection after this
     //schema level validation will be checked during this
     res.send("New User added Successfully !!!");

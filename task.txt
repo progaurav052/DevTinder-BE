@@ -75,6 +75,22 @@ API level validation
 -------------------------------------------------------------------------------------
 
 Encrypting passwords:
+ - Use brcypt library to encrypt pwd during /signup
+ - syntax for signup -> const hashpwd = await bcrypt.hash(password, 10);
+ - store this hashpwd in DB 
+ - in login api use for bcrypt -> await bcrypt.compare(password, user.password);
+
+ ------------------------------------------------------------------------------------
+
+ Authentication and JWT:
+
+ - install cookie parser to read cookies
+ - try to send Dummy cookie and read it and check if you got it back 
+ - install jsonwebtoken and implement it 
+ - Study theory of JWT and cookies 
+ - Use cookies creation and JWT in /login 
+ - use that token to validate and get /profile
+ 
 
 
 
