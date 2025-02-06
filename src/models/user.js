@@ -30,19 +30,14 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-      validate(value)
-      {
-        if(!validator.isStrongPassword(value))
-        {
-          throw new Error("Not a Strong Password!!!");
-        }
-      }
     },
     age: {
-      type: String,
+      type: Number,
+      required:true,
     },
     gender: {
       type: String,
+      required:true,
       // adding custom validation for gender 
       // if anything other than male , female , other is detected dont allow it 
       validate(value)
@@ -56,7 +51,7 @@ const userSchema = mongoose.Schema(
     },
     profileurl: {
       type: String,
-      default: "Default profile pic",
+      default: "https://media.licdn.com/dms/image/v2/D5603AQHLA3klOeUFHw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1725900543881?e=2147483647&v=beta&t=mwFcfCvgiAOdRKTQ2nRaJKxDIlTlRfPkt_tgedKABFE",
       validate(value)
       {
         if(!validator.isURL(value))
@@ -68,6 +63,7 @@ const userSchema = mongoose.Schema(
     },
     skills:{
       type:[String],
+      required:true,
     }
   },
   { timestamps: true }

@@ -21,6 +21,6 @@ const UserAuth = (req,res,next) =>{
 }
 
 module.exports = {
-  AdminAuth,
-  UserAuth,
+  AdminAuth,// equivalent to AdminAuth:AdminAuth,
+  UserAuth,// UserAuth:UserAuth,
 };
