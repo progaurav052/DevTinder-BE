@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const { User } = require("./models/user");
 const { connectDB } = require("./config/database");
 const { ReturnDocument } = require("mongodb");
+const { isValidated } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -47,9 +49,10 @@ app.patch("/user/:user_id", async (req, res) => {
     if (!isUpdateAllowed) {
       throw new Error("Update of the specified field not allowed!!");
     }
-    if(data?.skills?.length>10)
-    {
-      throw new Error("skills length should be less than 10, Add only relevant skills according to JD")
+    if (data?.skills?.length > 10) {
+      throw new Error(
+        "skills length should be less than 10, Add only relevant skills according to JD"
+      );
     }
 
     const updated_doc = await User.findByIdAndUpdate(userId, data, {
@@ -127,21 +130,27 @@ app.get("/user", async (req, res) => {
 // POST API --> to store data in DB
 //working
 app.post("/signup", async (req, res) => {
-  /*
-  const userObject = {
-    firstName: "Rohit",
-    lastName: "Sharma",
-    emailId: "rohitcwc@gmail.com",
-    password: "rohit@123",  
-    // here we used key value pair 
-    // in json even the key is an string "<>"
-  }
-  
-  */
-
-  const newuser = new User(req.body);
+  // validation of data should happen first
+  // dont write validation code here -- Make use of helper function which we can call
   try {
+    isValidated(req);
+    const { firstName, lastName, emailId, password, age, gender, skills } =req.body;
+  
+    //encrypt the password and store it
+    //use bcrypt
+    const hashpwd=await bcrypt.hash(password,10);
+    const newuser = new User({
+      firstName,
+      lastName,
+      emailId,
+      password:hashpwd,// storing hash pwd
+      age,
+      gender,
+      skills,
+    });
+    
     await newuser.save(); // a new doc will be saved in the collection after this
+    //schema level validation will be checked during this
     res.send("New User added Successfully !!!");
   } catch (err) {
     // if data validation is not met this will be triggered also

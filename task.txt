@@ -61,3 +61,22 @@
 - add timestamps to docs... 
 
 ---------------------------------------------------------------------------------
+
+API level validation
+
+- add api level validation on patch and post api 
+- skills length validation
+- patch field validation
+- install validator library
+- validate email using validator
+- validate photourl using validator
+- strong password validation
+
+-------------------------------------------------------------------------------------
+
+Encrypting passwords:
+
+
+
+
+
