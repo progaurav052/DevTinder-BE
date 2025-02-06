@@ -129,6 +129,45 @@ app.get("/user", async (req, res) => {
 
 // POST API --> to store data in DB
 //working
+app.post("/login",async(req,res)=>{
+  
+  try {
+          //our login logic will be based on email and password
+          const {emailId,password}=req.body;
+          if(!emailId || !password) // if we dont send email and pass in re.body and if we leave it empty to handle this 
+          {
+              throw new Error("Enter both EmailId and password");
+          }
+          const user = await User.findOne({emailId:emailId});
+          if(!user)
+          {
+            res.send("invalid Credentials!!!");
+          }
+          else
+          {
+            //we have found the email sent from body 
+            //match the password
+            const match = await bcrypt.compare(password,user.password);
+            if(match)
+            {
+              res.send("Logged in Successfully!!!");
+            }
+            else{
+              res.send("Invalid Credentials");
+            }
+          }
+
+
+    
+  } catch (error) {
+    res.status(400).send(error.message);
+
+  }
+  
+
+
+
+})
 app.post("/signup", async (req, res) => {
   // validation of data should happen first
   // dont write validation code here -- Make use of helper function which we can call
