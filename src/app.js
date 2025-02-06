@@ -8,6 +8,8 @@ const { ReturnDocument } = require("mongodb");
 const { isValidated } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
 
 const app = express();
 
@@ -131,12 +133,32 @@ app.get("/user", async (req, res) => {
 
 
 app.get("/profile",async(req,res)=>{
-// this is an api which is called usuaaly after getting logged in for fetching my profile
-// Note for this we should not send any req.body --> this can be handled using cookies 
+  try {
+    
+    // this is an api which is called usuaaly after getting logged in for fetching my profile
+    // Note for this we should not send any req.body --> this can be handled using cookies 
+    //let just intially see if we are getting the cookie with token back 
+    // we need to use the cookie parser to read the cookie
+    const {token} =req.cookies;
+    if(!token)
+    {
+      throw new Error("Login first to get Profile!!");
+    }
 
-//let just intially see if we are getting the cookie with token back 
-console.log(req.cookies);// we need to use the cookie parser to read the cookie
-res.send("Sending the /profile page ....");
+    // we have to fetch the correct profile for this 
+    const decod_msg=jwt.verify(token,'Dev@123Tinder$5');
+    const {_id}=decod_msg;
+    if(!_id)
+    {
+      throw new Error("could fecth _id from token!!!");
+    }
+    const user_details=await User.findById(decod_msg._id)
+    res.send(user_details);
+  } catch (error) {
+    res.status(400).send(error.message);
+
+  }
+
 
 
 })
@@ -163,8 +185,13 @@ app.post("/login", async (req, res) => {
         // this can be done using cookies and jwt 
         //this jwt will be inside the cookies and will be sent with every api call of that user once he is logged in 
         //dummy token creation
-        const token="bbjasbbadslfhpfjdsffbdsidsofi";
+        //const token="bbjasbbadslfhpfjdsffbdsidsofi";
                     //name //value of the token        
+        //res.cookie("token",token);
+        // we need to generate a token which should have should not have sensitive data such as email or pwd 
+        // it should also be usefull to fetch the user profile from the data set in token -- we need such data in token 
+                               // id will be encrypted and stores in token
+        const token = jwt.sign({_id:user._id},'Dev@123Tinder$5');
         res.cookie("token",token);
         res.send("Logged in Successfully!!!");
       } else {
