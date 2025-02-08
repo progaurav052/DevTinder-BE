@@ -9,17 +9,13 @@ const { isValidated } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const {UserAuth}=require("./middlewares/auth");
+const { UserAuth } = require("./middlewares/auth");
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-// it converts json to js object and makes it available in req.body
-// this is middleware will be activated for all routes
-// middleware to read the json data in the req.body
-// because our server is not able to read the json data which is being sent
-// express doesnt automatically parse json data , beacuse data can be of any type , json , urlencoded etc ...
+
 connectDB()
   .then(() => {
     console.log("Connected to Database successfully!!!");
@@ -131,8 +127,7 @@ app.get("/user", async (req, res) => {
 });
 */
 
-
-app.get("/profile",UserAuth, async (req, res) => {
+app.get("/profile", UserAuth, async (req, res) => {
   try {
     // this is an api which is called usuaaly after getting logged in for fetching my profile
     // Note for this we should not send any req.body --> this can be handled using cookies
@@ -145,13 +140,13 @@ app.get("/profile",UserAuth, async (req, res) => {
   }
 });
 
-app.get("/SendConRequest",UserAuth,async(req,res)=>{
+app.get("/SendConRequest", UserAuth, async (req, res) => {
   try {
     res.send("Connection request sent successfully!!!");
   } catch (error) {
     res.status(400).send("Something Went Wrong!!!");
   }
-})
+});
 // POST API --> to store data in DB
 //working
 app.post("/login", async (req, res) => {
@@ -168,19 +163,11 @@ app.post("/login", async (req, res) => {
     } else {
       //we have found the email sent from body
       //match the password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      //User Schema method Usage
+      const isPasswordValid = await user.isPasswordCorrect(password);
       if (isPasswordValid) {
-        // if password is valid --> login is successfull and we need to store session of the user
-        // this can be done using cookies and jwt
-        //this jwt will be inside the cookies and will be sent with every api call of that user once he is logged in
-        //dummy token creation
-        //const token="bbjasbbadslfhpfjdsffbdsidsofi";
-        //name //value of the token
-        //res.cookie("token",token);
-        // we need to generate a token which should have should not have sensitive data such as email or pwd
-        // it should also be usefull to fetch the user profile from the data set in token -- we need such data in token
-        // id will be encrypted and stores in token
-        const token = jwt.sign({ _id: user._id }, "Dev@123Tinder$5");
+        //user schema method usage
+        const token = await user.getJWT();
         console.log(token);
         res.cookie("token", token);
         res.send("Logged in Successfully!!!");

@@ -8,6 +8,7 @@ const UserAuth = async(req,res,next) =>{
   try {
     console.log(req.cookies);
     const { token } = req.cookies;
+    console.log(token);
     if (!token) {
       throw new Error("Login first to get Profile!!");
     }
