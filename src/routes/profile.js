@@ -2,6 +2,9 @@ const express = require("express");
 const profileRouter = express.Router();
 const { UserAuth } = require("../middlewares/auth");
 const { profileEditValidation } = require("../utils/validation");
+const {User}=require("../models/user")
+const bcrypt=require("bcrypt");
+
 
 profileRouter.get("/profile/view", UserAuth, async (req, res) => {
   try {
@@ -25,33 +28,60 @@ profileRouter.patch("/profile/edit", UserAuth, async (req, res) => {
   // not allowed to update email , password ,gender
   try {
     const loggedinUser = req.user;
-    //req.user is user that we got from database , this is reference to the actual document 
-    console.log(loggedinUser)
-    if(profileEditValidation(req))
-    {
-        Object.keys(req.body).forEach(key=>{
-           loggedinUser[key]=req.body[key];
-
-        })
-        res.send(loggedinUser);
-        await loggedinUser.save();
-        // if the reference to that actual doc it will update and save the doc 
-        // else it will create an new doc 
-    
-
-
-    }
-    else
-    {
+    //req.user is user that we got from database , this is reference to the actual document
+    console.log(loggedinUser);
+    if (profileEditValidation(req)) {
+      Object.keys(req.body).forEach((key) => {
+        loggedinUser[key] = req.body[key];
+      });
+      res.send(loggedinUser);
+      await loggedinUser.save();
+      // if the reference to that actual doc it will update and save the doc
+      // else it will create an new doc
+    } else {
       throw new Error("Updating the specified feild is not valid !!!");
     }
-
-
   } catch (error) {
-    res.status(400).send("Error !!!:"+error.message);
-
+    res.status(400).send("Error !!!:" + error.message);
   }
 });
+
+profileRouter.patch("/profile/resetPwd",async (req,res)=>{
+  // in the req.body i will send email , oldpwd , newpwd ;
+  // will find the user based on email id 
+const {emailId,oldPassword,newPassword}=req.body;
+  try {
+    const user = await User.findOne({emailId:emailId});
+    if(!user)
+    {
+      throw new Error("Invalid Credentials ,cannot reset passowrd !!!");
+    }
+    else{
+      //try and match password
+      const isPwdMatch=await user.isPasswordCorrect(oldPassword);
+      if(isPwdMatch)
+      {
+        newHashedPassword= await bcrypt.hash(newPassword,10);
+        user.password=newHashedPassword;
+        /*
+        If you want to use bracket notation, you need to pass the property name as a string:
+
+javascript
+Copy
+user['password'] = newHashedPassword;
+        */
+        await user.save();
+        res.send("Password reset successfull");
+
+
+      }
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+  
+
+})
 
 module.exports = {
   profileRouter,

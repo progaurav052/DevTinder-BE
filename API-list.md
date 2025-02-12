@@ -1,15 +1,16 @@
 #DevTinder APi
 
 #authRouter
-- POST /signup
-- POST /login
-- POST /logout
+- POST /signup --done
+- POST /login  --done
+- POST /logout --done
 
 
 #profileRouter
-- GET /profile/view
-- PATCH /profile/edit
-- PATCH /profile/password 
+- GET /profile/view  --done
+- PATCH /profile/edit  --done 
+- PATCH /profile/password  -- (Reset password API , make use of email and old password , not forgot password);
+
 
 
 #connectionRequestRouter
