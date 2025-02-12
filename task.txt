@@ -90,6 +90,17 @@ Encrypting passwords:
  - Study theory of JWT and cookies 
  - Use cookies creation and JWT in /login 
  - use that token to validate and get /profile
+ - Used userSchema methods today 
+
+ -------------------------------------------------------------------------------------
+
+Express Router :
+
+- Not a good way to write all api in one place 
+- we need to group similar api (or similar class api) together 
+- use express router for this 
+- create an authRouter , userRouter ,profileRouter 
+- use a different folder 
  
 
 
