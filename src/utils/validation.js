@@ -1,6 +1,6 @@
 const validator =require("validator");
 
-const isValidated =(req)=>{
+const signUpValidation =(req)=>{
 
     //this is redudandant API validation 
     //using this for signup
@@ -8,7 +8,7 @@ const isValidated =(req)=>{
     //i have to validate this fields
     if(!firstName || !lastName)
     {
-        throw new Error("Specify firstname and Lastname!!!");
+        throw new Error("Specify firstname and Lastname !!");
 
     }
     if(!validator.isEmail(emailId))
@@ -19,6 +19,27 @@ const isValidated =(req)=>{
     
 }
 
+const profileEditValidation=(req)=>{
+
+    //this is redudandant API validation 
+    //using this for signup
+    const allowedUpdates = [
+        "firstName",
+        "lastName",
+        "age",
+        "profileurl",
+        "skills",
+      ];
+    // .every -> can be used to short circuit
+    const isAllowedUpdate=Object.keys(req.body).every(field=>allowedUpdates.includes(field));
+    return isAllowedUpdate;  
+
+    
+}
+
 module.exports ={
-    isValidated,
+    signUpValidation,
+    profileEditValidation,
+
+
 }

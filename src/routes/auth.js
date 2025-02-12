@@ -2,7 +2,7 @@ const express = require("express");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const authRouter = express.Router();
-const { isValidated } = require("../utils/validation");
+const { signUpValidation } = require("../utils/validation");
 
 authRouter.post("/login", async (req, res) => {
   try {
@@ -39,7 +39,7 @@ authRouter.post("/signup", async (req, res) => {
   // validation of data should happen first
   // dont write validation code here -- Make use of helper function which we can call
   try {
-    isValidated(req); // help
+    signUpValidation(req); // help
     const { firstName, lastName, emailId, password, age, gender, skills } =
       req.body;
 
