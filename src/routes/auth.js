@@ -1,8 +1,8 @@
 const express = require("express");
-const {User} = require("../models/user");
+const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const authRouter = express.Router();
-const {isValidated}= require("../utils/validation")
+const { isValidated } = require("../utils/validation");
 
 authRouter.post("/login", async (req, res) => {
   try {
@@ -39,7 +39,7 @@ authRouter.post("/signup", async (req, res) => {
   // validation of data should happen first
   // dont write validation code here -- Make use of helper function which we can call
   try {
-    isValidated(req); // help 
+    isValidated(req); // help
     const { firstName, lastName, emailId, password, age, gender, skills } =
       req.body;
 
@@ -65,7 +65,13 @@ authRouter.post("/signup", async (req, res) => {
   }
 });
 
+authRouter.post("/logout", (req, res) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+  });
+  res.send("Logged out successfully");
+});
 
-module.exports={
-    authRouter,
-}
+module.exports = {
+  authRouter,
+};
