@@ -9,14 +9,14 @@
 #profileRouter
 - GET /profile/view  --done
 - PATCH /profile/edit  --done 
-- PATCH /profile/password  -- (Reset password API , make use of email and old password , not forgot password);
+- PATCH /profile/password  -- (Reset password API , make use of email and old password , not forgot password); --done
 
 
 
 #connectionRequestRouter
-- POST /request/send/interested/:userId
-- POST /request/send/ignored/:userId
-- POST /request/review/accepted/:requestId
+- POST /request/send/interested/:userId -- when we right swipe
+- POST /request/send/ignored/:userId  -- when we left swipe
+- POST /request/review/accepted/:requestId 
 - POST /request/review/rejected/:requestId
 
 #userRouter

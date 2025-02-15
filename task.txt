@@ -101,6 +101,20 @@ Express Router :
 - use express router for this 
 - create an authRouter , userRouter ,profileRouter 
 - use a different folder 
+
+---------------------------------------------------------------------------------------
+
+API Development :
+
+- /signup + auth 
+- /login + auth 
+- /logut 
+
+- profile/view 
+- profile/edit 
+- profile/resetpwd 
+
+
  
 
 
