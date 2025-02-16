@@ -25,6 +25,10 @@ const connectionRequestSchema = new mongoose.Schema(
   }
 );
 
+//compound index   // 1 -> asc order , -1 -> des order 
+connectionRequestSchema.index({fromUserId:1,toUserId:1});// fasten query which uses this both , like the one query which we have used 
+
+
 const ConnectionRequest = new mongoose.model("ConnectionRequest",connectionRequestSchema);
 
 module.exports={

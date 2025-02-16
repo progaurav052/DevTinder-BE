@@ -28,7 +28,7 @@ requestRouter.post(
         // use return / throw new error
       }
       // @ API Validation 3: self to self request also not allowed
-      if (fromUserId == toUserId) {
+      if (fromUserId.equals(toUserId)) {
         return res.status(400).json({
           messsage: "Invalid connection request ... self request not valid..",
         });
@@ -68,7 +68,7 @@ requestRouter.post(
       const savedConrequest = await conRequest.save();
 
       res.json({
-        message: "Connection sent Successfully!!",
+        message: "Connection request sent Successfully!!!",
         savedConrequest,
       });
     } catch (error) {
