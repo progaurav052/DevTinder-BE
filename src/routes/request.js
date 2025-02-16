@@ -16,7 +16,6 @@ requestRouter.post(
       const fromUserId = req.user._id; //logged in user
       const toUserId = req.params.toUserId;
       const status = req.params.status;
-
       const allowedStatus = ["notinterested", "interested"];
 
       // @API Validation 1- for statuus
@@ -36,7 +35,6 @@ requestRouter.post(
 
       // @ API Validation 2- not allow duplicate requests and also A->B if already there ,B->A not allowed
       // use mongoose methods for this . findOne
-
       const existingConnectionRequest = await ConnectionRequest.findOne({
         $or: [
           { fromUserId: fromUserId, toUserId: toUserId },
@@ -76,6 +74,50 @@ requestRouter.post(
     }
   }
 );
+
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  UserAuth,
+  async (req, res) => {
+    // once the user is logged in , he will be inside req.user
+
+    try {
+      const loggedInUser = req.user;
+      const status = req.params.status;
+      const requestId = req.params.requestId; // this is id corresponfing to each conRequest stored in DB
+      const allowedStatus = ["accepted", "rejected"];
+
+      // API Validation -1
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).send("Invalid status of conRequest...!!");
+      }
+
+      // API validation -2 // the request must exist in DB in interested form
+      const conRequestExist = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+      if (!conRequestExist) {
+        return res
+          .status(404)
+          .send("No ConRequest found , to be approved ....");
+      }
+
+      // if such request is waiting for acceptance , than change the status of it and save in DB;
+      conRequestExist.status = "accepted";
+      const data = await conRequestExist.save();
+      res.status(200).json({
+        message: "connection request accepted !!!",
+        data,
+      });
+    } catch (error) {
+      res.status(400).send(error.message);
+
+    }
+  }
+);
+
 module.exports = {
   requestRouter,
 };

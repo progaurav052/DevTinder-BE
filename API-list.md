@@ -13,14 +13,19 @@
 
 
 
-#connectionRequestRouter
+#connectionRequestRouter 
+  - Sender POV
 - POST /request/send/interested/:userId -- when we right swipe - check from tinder 
 - POST /request/send/ignored/:userId  -- when we left swipe
  -- an single API can be used to create this , using dynamic api request 
+ -- /request/send/:status/:userId
 
 
+- reciver POV -> when he recives an notification with accept and ignore , if he clicks any these API WILL BE CALLED 
 - POST /request/review/accepted/:requestId 
 - POST /request/review/rejected/:requestId
+- we can make this dynammic also --> /request/review/:status:requestId
+
 
 #userRouter
 - GET /user/connections
