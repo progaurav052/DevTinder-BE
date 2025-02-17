@@ -15,21 +15,21 @@
 
 #connectionRequestRouter 
   - Sender POV
-- POST /request/send/interested/:userId -- when we right swipe - check from tinder 
-- POST /request/send/ignored/:userId  -- when we left swipe
+- POST /request/send/interested/:userId -- when we right swipe - check from tinder --done
+- POST /request/send/ignored/:userId  -- when we left swipe --done
  -- an single API can be used to create this , using dynamic api request 
- -- /request/send/:status/:userId
+ -- /request/send/:status/:userId --done
 
 
 - reciver POV -> when he recives an notification with accept and ignore , if he clicks any these API WILL BE CALLED 
-- POST /request/review/accepted/:requestId 
-- POST /request/review/rejected/:requestId
-- we can make this dynammic also --> /request/review/:status:requestId
+- POST /request/review/accepted/:requestId --done
+- POST /request/review/rejected/:requestId --done
+- we can make this dynammic also --> /request/review/:status:requestId --done
 
 
 #userRouter
-- GET /user/connections
-- GET /user/requestrecived
+- GET /user/connections - to get all connections
+- GET /user/requestrecived - to get all request recived in interested mode  
 - GET /user/feedAPi - gets you the profiles of other user on platform
 
 //tinder is also using mongoDb --> _id is there in console of profiles
