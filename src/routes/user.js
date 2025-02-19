@@ -3,7 +3,7 @@ const userRouter = express.Router();
 const { UserAuth } = require("../middlewares/auth");
 const { ConnectionRequest } = require("../models/connectionRequest");
 const USER_SAFE_DATA = "firstName lastName age gender skills";
-const {User} = require("../models/user");
+const { User } = require("../models/user");
 
 userRouter.get("/user/requestreceived", UserAuth, async (req, res) => {
   // api is to get all the requests that are recived by the user that is logged in
@@ -56,14 +56,25 @@ userRouter.get("/user/connections", UserAuth, async (req, res) => {
       }
       return row.fromUserId;
     });
-    res.status(400).json({data});
+    res.status(400).json({ data });
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 userRouter.get("/user/feed", UserAuth, async (req, res) => {
   //api to display feed of users to logged in User
+  //pagination can be passed as query apramter inhere
+  // user/feed?page=1&limit=10;
   try {
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 2;
+    //page 1 -> 1-2
+    // page 2 -> 3-4
+    // page 3 -> 5-6  // for limit as 2
+    // skip -> page-1*limit
+
+    const skip = (page - 1) * limit;
+
     const loggedInUser = req.user;
     // we need to get all those users which are not related to user till now
     //either the user has not ignored or accepted , showed interest till now
@@ -80,15 +91,16 @@ userRouter.get("/user/feed", UserAuth, async (req, res) => {
     });
 
     const feedData = await User.find({
-      $and :[
+      $and: [
         { _id: { $nin: Array.from(hashSetUsers) } },
-        { _id: { $ne: loggedInUser._id } }
-      ]
-    }
-      
-    ).select(USER_SAFE_DATA);
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
     // this will give us our expected users
-    res.status(200).json( feedData );
+    res.status(200).send(feedData);
   } catch (error) {
     res.status(400).send(error.message);
   }
